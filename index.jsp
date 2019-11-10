@@ -1,49 +1,70 @@
 <%@ page contentType = "text/html;charset=utf-8" %>
-<%@ page import="java.io.*" %>
-<%@ page import="java.net.Socket" %>
-<%
-	String sendStr = "";
-	String recvStr = "";
-	
-	try {
-		Socket socket = new Socket("localhost", 4000);
-		
-		OutputStream output = socket.getOutputStream();
-		InputStream input = socket.getInputStream();
-		DataOutputStream dataOutput = new DataOutputStream(output);
-		DataInputStream dataInput = new DataInputStream(input);
-		
-		sendStr = "end";
-		byte buffer[] = sendStr.getBytes();
-		dataOutput.write(buffer, 0, buffer.length);
-		
-		buffer = new byte[100];
-		for (int i = 0; i < buffer.length; i++) {
-			if ((buffer[i] = dataInput.readByte()) == 0)
-				break;
-		}
-		recvStr = new String(buffer);
-		
-		input.close();
-		dataInput.close();
-		output.flush();
-		output.close();
-		dataOutput.flush();
-		dataOutput.close();
-		socket.close();
-	} catch (Exception e) {
-		recvStr = e.getMessage();
-	}
-%>
 
 <html>
 	<head>
+		<script src="js/jquery-3.4.1.min.js"></script>
+		<link rel="stylesheet" href="css/toggle.css"/>
+		<style>
+			div.toggle { position: relative; width: 210px; height: 36px; }
+			p.toggle { font-size:18px; font-weight: bold; position: absolute; border-radius: 15px / 50%; margin: 0; padding: 4px; width: 160px; height: 26px; background: #ece6e6; }
+			label.toggle { left : 130px; }
+		</style>
+		<script type="text/javascript" language="javascript">
+			$(document).ready(function () {
+				$.ajax({
+					type : "GET",
+					url : "getStatus.jsp",
+					dataType : 'json',
+					error : function(){
+						alert("통신 실패!!!!");
+					},
+					success : function(obj){
+						if (obj["status"] == "succeed") {
+							document.getElementById('train').checked = obj["data"]["train"];
+							document.getElementById('train').checked = obj["data"]["train"];
+						}
+					}
+				});
+			});
+		
+			function switchFunc(cb) {
+				let prevCheck = !cb.checked;
+				
+				let func = cb.id;
+				let power = (cb.checked) ? "on" : "off";
+				
+				$.ajax({
+					type : "POST",
+					url : "switchFunc.jsp",
+					data: {
+						func: func,
+						power: power
+					},
+					dataType : "json",
+					error : function(){
+						alert("통신 실패!!!!");
+					},
+					success : function(obj){
+						if (obj["status"] != "succeed") {
+							alert(obj["data"]);
+							cb.checked = prevCheck;
+						}
+					}
+				});
+			}
+		</script>
 	</head>
 	<body>
-        시작<br>
-        <%%>
-		송신: <%= sendStr %><br>
-		<%= String.format("수신: %s", recvStr) %><br>
-		끝<br>
+		<div class="toggle">
+			<p class="toggle">데이터 축적</p>
+			<input type="checkbox" name="saveData" id="saveData" onclick="switchFunc(this);" checked>
+			<label class="toggle" for="saveData"><span></span></label>
+		</div>
+		<div class="toggle">
+			<p class="toggle">신경망 학습</p>
+			<input type="checkbox" name="train" id="train" onclick="switchFunc(this);" checked>
+			<label class="toggle" for="train"><span></span></label>
+		</div>
 	</body>
+	
 </html>
