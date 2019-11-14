@@ -10,6 +10,11 @@
 <%@ page import="java.System.*" %>
 
 <%
+	request.setCharacterEncoding("UTF-8");
+	
+	String datetime = request.getParameter("datetime");
+	if (datetime == null) return ;
+	
 	String sendStr = "";
 	String recvStr = "";
 	
@@ -25,16 +30,22 @@
 		
 		//＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊//
 		// Send
+		JSONObject methodData = new JSONObject();
+		methodData.put("datetime", datetime);
+			
 		JSONObject data = new JSONObject();
-		data.put("method", "status");
+		data.put("method", "predict");
+		data.put("data", methodData);
+		
 		sendStr = data.toJSONString();
+		System.out.println(sendStr);
 		
 		buffer = sendStr.getBytes();
 		dataOutput.write(buffer, 0, buffer.length);
 		
 		//＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊//
 		// Recv
-		buffer = new byte[500];
+		buffer = new byte[2000];
 		for (int i = 0; i < buffer.length; i++) {
 			if ((buffer[i] = dataInput.readByte()) == 0)
 				break;

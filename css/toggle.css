@@ -1,4 +1,7 @@
 <!-- 출처: http://ilovemarkup.blogspot.com/2016/08/css-onoff.html ->
+
+input[type="checkbox"].toggle {}
+
 input[type="checkbox"] {
   position: absolute;
   visibility: hidden;
