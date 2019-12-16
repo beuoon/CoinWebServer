@@ -14,7 +14,6 @@
 <%@ page import="org.json.simple.parser.ParseException" %>
 
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.System.*" %>
 
 <%
 	request.setCharacterEncoding("UTF-8");
@@ -68,8 +67,6 @@
 		data.put("data", dataArr);
 		recvStr = data.toJSONString();
 		
-		System.out.println(recvStr);
-		
 	} catch (Exception e) {
 		recvStr = e.getMessage();
 	} finally{
@@ -80,7 +77,5 @@
 			recvStr = e.getMessage();
 		}
 	}
-	
-	System.out.println(recvStr);
 %>
 <%= recvStr %>

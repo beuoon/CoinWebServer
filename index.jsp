@@ -2,6 +2,7 @@
 
 <html>
 	<head>
+		<title>CoinPredict</title>
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<link rel="stylesheet" href="css/toggle.css"/>
 		<style>
