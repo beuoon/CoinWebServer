@@ -249,6 +249,7 @@ Graph.prototype = {
 			dataType: "json",
 			error: function(){
 				console.log("predict - 통신 실패");
+				self.predictList.push(time);
 			},
 			success: function(obj){
 				if (obj["status"] != "succeed")
