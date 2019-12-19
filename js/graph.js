@@ -61,6 +61,16 @@ Graph.prototype = {
 		
 		for (let i = this.startedFetch.length; this.fetchList.length > 0 && i < this.MAX_TRY_NUM; i++) {
 			let time = this.fetchList.shift();
+			
+			let index = this.history.findIndex(h => h.time == time);
+			if (index != -1) {
+				index = index - this.nodeNum;
+				
+				if (index > 0) continue;
+				
+				time = this.history[0].time;
+			}
+			
 			this.fetchHistory(new Date(time), this.nodeNum);
 			this.startedFetch.push(time);
 		}
