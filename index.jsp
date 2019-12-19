@@ -5,6 +5,7 @@
 		<title>CoinPredict</title>
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<link rel="stylesheet" href="css/toggle.css"/>
+		<link rel="stylesheet" href="css/slider.css"/>
 		<style>
 			div.toggle { position: relative; width: 210px; height: 36px; }
 			p.toggle { font-size:18px; font-weight: bold; position: absolute; border-radius: 15px / 50%; margin: 0; padding: 4px; width: 160px; height: 26px; background: #ece6e6; }
@@ -39,6 +40,7 @@
 				});
 			}
 			
+			// Date
 			Date.prototype.format = function(f) {
 				if (!this.valueOf()) return " ";
 			 
@@ -65,8 +67,8 @@
 			String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s += this; } return s;};
 			String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
 			Number.prototype.zf = function(len){return this.toString().zf(len);};
-
 			
+			// Status 갱신
 			$(document).ready(function () {
 				$.ajax({
 					type : "GET",
@@ -88,6 +90,12 @@
 	<body>
 		<canvas id="graphCanvas"></canvas><br><br>
 		
+		<div class="slidecontainer">
+			<input type="range" min="20" max="500" value="240" class="slider" id="nodeNum">
+		</div>
+		
+		<br>
+		
 		<div class="toggle">
 			<p class="toggle">데이터 축적</p>
 			<input type="checkbox" class="toggle" name="saveData" id="saveData" onclick="switchFunc(this);" checked>
@@ -100,6 +108,12 @@
 		</div>
 		
 		<script src="js/graph.js"></script>
+		<script>
+			let slider = document.getElementById("nodeNum");
+			slider.oninput = function() {
+				graph.setNodeNum(this.value);
+			}
+		</script>
 	</body>
 	
 </html>

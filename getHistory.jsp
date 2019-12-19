@@ -18,9 +18,9 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	
-	String startDatetime = request.getParameter("startDatetime");
-	String endDatetime = request.getParameter("endDatetime");
-	if (startDatetime == null) return ;
+	String datetime = request.getParameter("datetime");
+	String dataNum = request.getParameter("dataNum");
+	if (datetime == null || dataNum == null) return ;
 	
 	String recvStr = "";
 	
@@ -30,11 +30,7 @@
 	String password = "root";
 	
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	String query = "";
-	if (endDatetime != null)
-		query = String.format("select * from history where datetime >= '%s' and datetime < '%s'", startDatetime, endDatetime);
-	else
-		query = String.format("select * from history where datetime >= '%s'", startDatetime);
+	String query = String.format("select * from history where datetime <= '%s' order by datetime desc limit %s", datetime, dataNum);
 	
 	Connection connection = null;
 	
